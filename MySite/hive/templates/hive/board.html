@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'hive/css/board.css' %}" />
+<script src="{% static 'hive/js/d3-hexjson.js' %}"></script>
+<script src="{% static 'hive/js/d3.min.js' %}"></script>
+
+
+<p> hexJSON board: </p>
+<div id="board"></div>
+
+<script>
+
+d3.json("{% static 'hive/board.hexjson' %}", function(error, hexjson) {
+
+    // Set the size and margins of the svg
+    var margin = {top: 10, right: 100, bottom: 10, left: 10},
+        width = 1000 - margin.left - margin.right,
+        height = 840 - margin.top - margin.bottom;
+
+    // Create the svg element
+    var svg = d3
+        .select("#board")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Render the hexes
+    var hexes = d3.renderHexJSON(hexjson, width, height);
+
+    // Bind the hexes to g elements of the svg and position them
+    var hexmap = svg
+        .selectAll("g")
+        .data(hexes)
+        .enter()
+        .append("g")
+        .attr("transform", function(hex) {
+            return "translate(" + hex.x + "," + hex.y + ")";
+        });
+
+    // Draw the polygons around each hex's centre and add their attributes
+    hexmap
+        .append("polygon")
+        .attr("class", "hexagon")
+        .attr('type', function(hex) {return hex.type;})
+        .attr('player', function(hex) {return hex.player;})
+        .attr("points", function(hex) {return hex.points;});
+
+    // Add the hex codes as labels
+    hexmap
+        .append("text")
+        .append("tspan")
+        .attr("text-anchor", "middle")
+        .text(function(hex) {return hex.key;});
+        
+    
+});
+
+</script>

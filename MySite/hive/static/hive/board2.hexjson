@@ -1,0 +1,47 @@
+{
+    "layout": "even-r",
+    "hexes": {
+        "Q2R-2": {
+            "q": 2,
+            "r": -2,
+            "type": "Piece",
+            "player": null
+        },
+        "Q3R-2": {
+            "q": 3,
+            "r": -2,
+            "type": "Piece",
+            "player": null
+        },
+        "Q3R-3": {
+            "q": 3,
+            "r": -3,
+            "type": "Piece",
+            "player": null
+        },
+        "Q2R-3": {
+            "q": 2,
+            "r": -3,
+            "type": "Piece",
+            "player": null
+        },
+        "Q1R-2": {
+            "q": 1,
+            "r": -2,
+            "type": "Piece",
+            "player": null
+        },
+        "Q1R-1": {
+            "q": 1,
+            "r": -1,
+            "type": "Piece",
+            "player": null
+        },
+        "Q2R-1": {
+            "q": 2,
+            "r": -1,
+            "type": "Piece",
+            "player": null
+        }
+    }
+}

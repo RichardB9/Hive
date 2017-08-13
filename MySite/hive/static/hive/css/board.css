@@ -1,0 +1,34 @@
+
+body {
+  font-family: "PT Sans", "Arial", sans-serif;
+  font-size: 10pt;
+}
+
+#board {
+    background-color: white;
+}
+
+.hexagon {
+    font-size: 10pt;
+    fill: #b0e8f0;
+    stroke-width: 2;
+    stroke: black;
+    transition-duration: 0.3s;
+}
+
+.hexagon[player="p1"] {
+    fill: white;
+}
+
+.hexagon[player="p2"] {
+    fill: black;
+}
+
+.hexagon[player="p2"] ~ text tspan {
+    fill: white;
+}
+
+.hexagon:hover {
+    stroke: grey;
+    stroke-width: 10;
+}
