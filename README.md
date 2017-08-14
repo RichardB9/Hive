@@ -1,6 +1,6 @@
 # Hive
 
-This is an implementation of the board game Hive, see http://www.gen42.com/downloads/rules/Hive_Rules.pdf for its rules.
+This is an implementation of the board game Hive, see http://www.gen42.com/downloads/rules/Hive_Carbon_English_Rules.pdf for its rules.
 
 This has been created as an hobby project and to learn more about Django and various web technologies.
 
