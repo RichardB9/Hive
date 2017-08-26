@@ -9,40 +9,54 @@ from hive.core.exceptions import InvalidMove
 class Piece(object):
     
     def __init__(self, player=None, board=None, q=None, r=None):
+        ''' Creates a piece. When q and r coordinates are given, the piece 
+        is immediately placed on the board. '''
         self.player = player
         self.board = board
         self.q = q
         self.r = r
-        
+        if (q is not None) and (r is not None):
+            self.place(q, r)
+            
     def get_possible_moves(self):
         ''' Returns a list of coordinates of possible moves for this piece '''
         if self.board.breaks_hive(self.q, self.r):
             return []
     
     def move(self, q, r):
-        ''' Moves the piece to (q, r)
-        
-        Throws InvalidMove if the move is not possible '''
-        possible_moves = self.get_possible_moves()
-        if (q, r) in possible_moves:
-            self.board.move_piece(self.q, self.r, q, r)
-        else:
-            raise InvalidMove('Invalid move')
+        ''' Moves the piece to (q, r) '''
+        # The piece has already been placed on the board
+        assert self.q is not None
+        assert self.r is not None
+        self.board.board.pop((self.q, self.r))
+        self.set_coordinates(q, r)
+        self.board.board[(q, r)] = self
     
-    def place(self, board, q, r):
+    def place(self, q, r):
         ''' Places this piece from your hand into the board '''
-        self.board = board
-        self.q = q
-        self.r = r
+        self.board.board[(q, r)] = self
+        self.set_coordinates(q, r)
+        
+    def remove(self):
+        self.board.board.pop((self.q, self.r))
+        self.q = None
+        self.r = None
+        return self
     
-    def set_coordinates(self, q, r, board):
+    def set_coordinates(self, q, r):
         self.q = q
         self.r = r
-        self.board = board
     
     def get_neighbours(self):
         ''' Returns a list of all neighbours '''
         return self.board.get_neighbours(self.q, self.r)
+    
+    def is_surrounded(self):
+        ''' Returns if the piece is completely surrounded '''
+        if self.q is None or self.r is None:
+            return False
+        neighbours = self.board.get_neighbours_coords(self.q, self.r)
+        return len(neighbours) == 6
 
     def __repr__(self, *args, **kwargs):
         if (self.q is not None) and (self.r is not None):
@@ -52,6 +66,9 @@ class Piece(object):
 
 
 class Ant(Piece):
+    
+    def __init__(self, player, board, q=None, r=None):
+        super().__init__(player, board, q, r)
     
     def get_possible_moves(self):
         super()
@@ -72,29 +89,30 @@ class Ant(Piece):
             unvisited = set(neighbours) - (set(visited).union(set(queue)))
             queue += list(unvisited)
         # Return the piece
-        self.board.place_piece(q, r, temp)
+        temp.place(q, r)
         return list(visited)
 
 
 class Bee(Piece):
     
+    def __init__(self, player, board, q=None, r=None):
+        super().__init__(player, board, q, r)
+    
     def get_possible_moves(self):
         ''' Returns a list of coordinates of possible moves for this piece '''
+        super()
         if self.board.breaks_hive(self.q, self.r):
             return []
         return self.board.pos_shifts(self.q, self.r)
 
-    def is_surrounded(self):
-        ''' Returns if the bee is completely surrounded '''
-        if self.q is None or self.r is None:
-            return False
-        neighbours = self.board.get_neighbours_coords(self.q, self.r)
-        return len(neighbours) == 6
-
 class Beetle(Piece):
+    
+    def __init__(self, player, board, q=None, r=None):
+        super().__init__(player, board, q, r)
     
     def get_possible_moves(self):
         ''' Returns a list of coordinates of possible moves for this piece '''
+        super()
         moves = []
         if self.board.breaks_hive(self.q, self.r):
             return moves
@@ -105,8 +123,12 @@ class Beetle(Piece):
 
 class Grasshopper(Piece):
     
+    def __init__(self, player, board, q=None, r=None):
+        super().__init__(player, board, q, r)
+    
     def get_possible_moves(self):
         ''' Returns a list of coordinates of possible moves for this piece '''
+        super()
         moves = []
         if self.board.breaks_hive(self.q, self.r):
             return moves
@@ -117,19 +139,29 @@ class Grasshopper(Piece):
 
 
 class Ladybug(Piece):
+    
+    def __init__(self, player, board, q=None, r=None):
+        super().__init__(player, board, q, r)
+        
     pass
 
 
 class Mosquito(Piece):
+    
+    def __init__(self, player, board, q=None, r=None):
+        super().__init__(player, board, q, r)
+        
     pass
 
 
 class Spider(Piece):
     
+    def __init__(self, player, board, q=None, r=None):
+        super().__init__(player, board, q, r)
+    
     def get_possible_moves(self):
         ''' Returns a list of coordinates of possible moves for this piece '''
-        if self.board.breaks_hive(self.q, self.r):
-            return []
+        super()
         moves, queue = [], []
         visited = set()
         q, r = self.q, self.r
@@ -146,9 +178,6 @@ class Spider(Piece):
                 moves += self.board.pos_shifts(n2[0], n2[1])
                 moves.remove(n1)
         # Return the piece
-        self.board.place_piece(q, r, temp)
+        temp.place(q, r)
         return moves
         
-    
-
-

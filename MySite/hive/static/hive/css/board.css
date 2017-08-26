@@ -16,15 +16,15 @@ body {
     transition-duration: 0.3s;
 }
 
-.hexagon[player="p1"] {
+.hexagon[player="Player1"] {
     fill: white;
 }
 
-.hexagon[player="p2"] {
+.hexagon[player="Player2"] {
     fill: black;
 }
 
-.hexagon[player="p2"] ~ text tspan {
+.hexagon[player="Player2"] ~ text tspan {
     fill: white;
 }
 

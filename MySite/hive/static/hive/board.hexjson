@@ -1,47 +1,35 @@
 {
     "layout": "odd-r",
     "hexes": {
-        "Q1R-2": {
-            "q": 1,
-            "r": -2,
-            "type": "Piece",
-            "player": "p1"
-        },
-        "Q2R-2": {
-            "q": 2,
-            "r": -2,
-            "type": "Piece",
-            "player": "p2"
-        },
-        "Q2R-3": {
-            "q": 2,
-            "r": -3,
-            "type": "Piece",
-            "player": "p1"
-        },
-        "Q1R-3": {
-            "q": 1,
-            "r": -3,
-            "type": "Piece",
-            "player": "p2"
-        },
-        "Q0R-2": {
+        "Q0R0": {
             "q": 0,
-            "r": -2,
-            "type": "Piece",
-            "player": "p1"
+            "r": 0,
+            "type": "Ant",
+            "player": "Player1"
+        },
+        "Q0R1": {
+            "q": 0,
+            "r": 1,
+            "type": "Ant",
+            "player": "Player1"
+        },
+        "Q1R1": {
+            "q": 1,
+            "r": 1,
+            "type": "Ant",
+            "player": "Player1"
         },
         "Q1R-1": {
             "q": 1,
             "r": -1,
-            "type": "Piece",
-            "player": "p2"
+            "type": "Ant",
+            "player": "Player2"
         },
-        "Q2R-1": {
-            "q": 2,
-            "r": -1,
-            "type": "Piece",
-            "player": "p1"
+        "Q1R0": {
+            "q": 1,
+            "r": 0,
+            "type": "Bee",
+            "player": "Player2"
         }
     }
 }

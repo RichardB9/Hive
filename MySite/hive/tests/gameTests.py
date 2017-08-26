@@ -4,9 +4,10 @@ Created on 21 Jul 2017
 @author: Richard
 '''
 import unittest
+import os
 from hive.core.game import Board, Game, Player
 from hive.core.pieces import Piece
-from hive.core.exceptions import InvalidPlaceError
+from hive.core.exceptions import InvalidPlace
 
 
 # class TestGame(unittest.TestCase):
@@ -22,61 +23,42 @@ class TestBoard(unittest.TestCase):
 
     def setUp(self):
         # Create simple board
-        self.p1 = Player('p1')
-        self.p2 = Player('p2')
+        self.p1 = Player('Player1')
+        self.p2 = Player('Player2')
         
         self.board = Board()
-        self.a = Piece(self.p1)
-        self.b = Piece(self.p2)
-        self.c = Piece(self.p1)
-        self.d = Piece(self.p2)
-        self.e = Piece(self.p1)
-        self.f = Piece(self.p2)
-        self.g = Piece(self.p1)
-        self.board.place_piece(2, -2, self.a)
-        self.board.place_piece(3, -2, self.b)
-        self.board.place_piece(3, -3, self.c)
-        self.board.place_piece(2, -3, self.d)
-        self.board.place_piece(1, -2, self.e)
-        self.board.place_piece(1, -1, self.f)
-        self.board.place_piece(2, -1, self.g)
+        self.a = Piece(self.p1, self.board, 2, -2)
+        self.b = Piece(self.p2, self.board, 3, -2)
+        self.c = Piece(self.p1, self.board, 3, -3)
+        self.d = Piece(self.p2, self.board, 2, -3)
+        self.e = Piece(self.p1, self.board, 1, -2)
+        self.f = Piece(self.p2, self.board, 1, -1)
+        self.g = Piece(self.p1, self.board, 2, -1)
+        
         # Create invalid board
         self.board_unconnected = Board()
-        self.board_unconnected.place_piece(0, 0, Piece())
-        self.board_unconnected.place_piece(1, 1, Piece())
-        
+        Piece(self.p1, self.board_unconnected, 0, 0)
+        Piece(self.p2, self.board_unconnected, 1, 1)
+
         self.board2 = Board()
-        self.a2 = Piece()
-        self.b2 = Piece()
-        self.c2 = Piece()
-        self.d2 = Piece()
-        self.e2 = Piece()
-        self.f2 = Piece()
-        self.g2 = Piece()
-        self.h2 = Piece()
-        self.board2.place_piece(1, 1, self.a2)
-        self.board2.place_piece(2, 1, self.b2)
-        self.board2.place_piece(2, 0, self.c2)
-        self.board2.place_piece(1, 0, self.d2)
-        self.board2.place_piece(0, 1, self.e2)
-        self.board2.place_piece(0, 2, self.f2)
-        self.board2.place_piece(1, 2, self.g2)
-        self.board2.place_piece(3, 0, self.h2)
+        self.a2 = Piece(self.p1, self.board2, 1, 1)
+        self.b2 = Piece(self.p2, self.board2, 2, 1)
+        self.c2 = Piece(self.p1, self.board2, 2, 0)
+        self.d2 = Piece(self.p2, self.board2, 1, 0)
+        self.e2 = Piece(self.p1, self.board2, 0, 1)
+        self.f2 = Piece(self.p2, self.board2, 0, 2)
+        self.g2 = Piece(self.p1, self.board2, 1, 2)
+        self.h2 = Piece(self.p2, self.board2, 3, 0)
 
     def tearDown(self):
         pass
 
-    def test_adding_pieces(self):
-        ''' Test for adding and retrieving pieces from the board '''
+    def test_get_pieces(self):
+        ''' Test for retrieving pieces from the board '''
         self.assertEqual(self.board.get_piece(2, -2), self.a)
         self.assertEqual(self.board.get_piece(3, -2), self.b)
         self.assertEqual(self.board.get_piece(3, -3), self.c)
         self.assertEqual(self.board.get_piece(4, 5), None)
-        # Try to place on already existing place:
-        h = Piece()
-        self.assertRaises(InvalidPlaceError, self.board.place_piece, 2, -2, h)
-        # Try to place the same piece twice:
-        self.assertRaises(InvalidPlaceError, self.board.place_piece, 2, -4, self.a)
     
     def test_get_neighbours(self):
         ''' Retrieving neighbours on the board '''
@@ -162,8 +144,30 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(self.board.axial_to_offset(1, -2, 'even-q'), (1, -1))
               
     def test_output_board_hexjson(self):
-        self.board.output_board_hexjson('odd-r', indent=4, file='board.hexjson')
+        ''' Tests if we can write board to file, content is not (yet) checked '''
+        file = 'board.hexjson'
+        dir_loc = os.path.relpath('..\\static\\hive')
+        cur_dir = os.path.dirname(__file__)
+        file_loc = os.path.join(cur_dir, dir_loc, file)
+        with open(file_loc, 'w') as out_file:
+            self.board.output_board_hexjson('odd-r', indent=4, file=out_file)
+
+
+class TestPlayer(unittest.TestCase):
     
+    def setUp(self):
+        self.p1 = Player('p1')
+        self.p2 = Player('p2')
+
+    def tearDown(self):
+        pass
+    
+    def test_place_undo_pieces(self):
+        self.assertEqual(self.p1.pieces['Ant'], 3)
+        self.p1.place_piece('Ant')
+        self.assertEqual(self.p1.pieces['Ant'], 2)
+        self.p1.undo_piece('Ant')
+        self.assertEqual(self.p1.pieces['Ant'], 3)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
