@@ -12,7 +12,7 @@ class PiecesTest(unittest.TestCase):
 
 
     def setUp(self):
-        self.board = Board()
+        self.board = Board(None)
         self.b = Piece(None, self.board, 3, -2)
         self.c = Piece(None, self.board, 3, -3)
         self.d = Piece(None, self.board, 2, -3)

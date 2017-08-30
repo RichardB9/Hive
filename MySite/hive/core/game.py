@@ -353,7 +353,8 @@ class ActionPlacePiece(Action):
             raise InvalidPlace('Invalid coordinates')
         if self.game.board.get(self.q, self.r) is not None:
             raise InvalidPlace('Must place piece on empty space')
-        
+        if self.game.turn >= 6 and len(self.player.bee) > 0:
+            raise InvalidPlace('Must place bee within 4 turns')
         
         neighbours = self.game.board.get_neighbours(self.q, self.r)
         neighbours = list(filter(None, neighbours))

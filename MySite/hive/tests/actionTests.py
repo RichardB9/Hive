@@ -72,9 +72,17 @@ class TestAction(unittest.TestCase):
             ActionMovePiece(self.board.get(1, -1), 1, 0)
             ActionMovePiece(self.board.get(2, -1), -1, 0)
         ActionMovePiece(self.board.get(2, -1), 1, 0)
+        
+        # TODO: raise an InvalidPlace instead
         # Seventh turn:
         with self.assertRaises(IndexError):
-            ActionPlacePiece(self.p1.ant.pop(), 0, 1)
+            ActionPlacePiece(self.p1.ant.pop(), -1, 0)
+        
+        with self.assertRaises(InvalidPlace):
+            # Dont place bee within four turns
+            ActionPlacePiece(self.p1.spider.pop(), -1, 0)
+        ActionPlacePiece(self.p1.bee.pop(), -1, 0)
+            
         
         self.board.save_board()
     

@@ -30,6 +30,12 @@
             "r": 0,
             "type": "Bee",
             "player": "Player2"
+        },
+        "Q-1R0": {
+            "q": -1,
+            "r": 0,
+            "type": "Bee",
+            "player": "Player1"
         }
     }
 }
